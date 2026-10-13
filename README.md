@@ -1,29 +1,28 @@
 # EEPROM Redundant Read with CRC Fallback
 
-Exercise 15 | Embedded C | S32 Design Studio | I2C EEPROM | CRC | UART
+Embedded C | S32 Design Studio | I2C EEPROM | CRC | UART
 
 A small embedded project that protects a value stored in EEPROM against corruption. The value is stored twice (a **main copy** and a **backup copy**), each with a **CRC** check code. At start-up the program checks the main copy and, if it is damaged, repairs it from the backup. All steps are printed over UART so they can be watched in PuTTY.
 
 ---
-
 ## Table of contents
 
-1. [What this project does](#1-what-this-project-does)
-2. [Requirements and scope](#2-requirements-and-scope)
-3. [How it works](#3-how-it-works)
-4. [EEPROM memory map](#4-eeprom-memory-map)
-5. [Status codes](#5-status-codes)
-6. [Hardware and software used](#6-hardware-and-software-used)
-7. [Project structure](#7-project-structure)
-8. [Configuration](#8-configuration)
-9. [How to build and run](#9-how-to-build-and-run)
-10. [Test cases](#10-test-cases)
-11. [Sample UART output](#11-sample-uart-output)
-12. [Code overview](#12-code-overview)
-13. [Limitations and future work](#13-limitations-and-future-work)
-14. [License](#14-license)
-15. [Author](#15-author)
-
+| No. | Section | What it covers |
+|---|---|---|
+| 1 | [What this project does](#1-what-this-project-does) | Purpose and basic idea |
+| 2 | [Requirements and scope](#2-requirements-and-scope) | Requirements R1 to R5 |
+| 3 | [How it works](#3-how-it-works) | Flowchart and step-by-step logic |
+| 4 | [EEPROM memory map](#4-eeprom-memory-map) | Addresses and test data |
+| 5 | [Status codes](#5-status-codes) | OK, restored, failed |
+| 6 | [Hardware and software used](#6-hardware-and-software-used) | Board, EEPROM, tools |
+| 7 | [Project structure](#7-project-structure) | Folders and files |
+| 8 | [Configuration](#8-configuration) | Macros, components, PuTTY settings |
+| 9 | [How to build and run](#9-how-to-build-and-run) | Build, flash and test steps |
+| 10 | [Test cases](#10-test-cases) | TC1 to TC5 |
+| 11 | [Sample UART output](#11-sample-uart-output) | Expected PuTTY output |
+| 12 | [Code overview](#12-code-overview) | Functions and messages |
+| 13 | [Limitations and future work](#13-limitations-and-future-work) | Known gaps and improvements |
+| 14 | [Author](#15-author) | Name, institution, contact |
 ---
 
 ## 1. What this project does
@@ -41,7 +40,7 @@ The program verifies Copy 1. If it is damaged, it checks Copy 2 and, if Copy 2 i
 
 ## 2. Requirements and scope
 
-| # | Requirement |
+| Rx | Requirement |
 |---|---|
 | R1 | When `ROM_BLOCK = 1`, check the CRC of Copy 1. |
 | R2 | If the Copy 1 CRC fails, call `NvM_ReadMirrorCopy()` to fetch Copy 2 and report `NVM_REQ_RESTORED_FROM_ROM`. |
@@ -179,14 +178,8 @@ eeprom-redundant-read-crc-fallback/
 | Write cycle delay | 5 ms |
 
 ### 8.4 PuTTY settings
+<img width="560" height="500" alt="image" src="https://github.com/user-attachments/assets/57c0965a-4583-4273-8ca7-1a194a76503a" />
 
-| Setting | Value |
-|---|---|
-| Connection type | Serial |
-| Serial line | Your board's COM port (see Device Manager) |
-| Speed | Same as the UART baud rate in the project |
-| Data bits / Parity / Stop bits | 8 / None / 1 |
-| Flow control | None |
 
 ## 9. How to build and run
 
@@ -213,44 +206,21 @@ eeprom-redundant-read-crc-fallback/
 
 ## 11. Sample UART output
 
-CRC values depend on your CRC configuration. `<CRC_12345>` is the CRC of 12345 and `<CRC_67892>` is the CRC of 67892. Replace them with the values you see in PuTTY.
 
 ### 11.1 First run (TC1)
 
-```
-Exercise 15: Redundant Read with Fallback
-EEPROM provisioning completed
-Initialized ROM_BLOCK=1, Copy1=67892, Copy2=12345
-ROM_BLOCK = 1
-Copy 1: data=67892 stored CRC=0x<CRC_12345> calculated CRC=0x<CRC_67892>
-Copy 1 CRC FAILED
-Reading mirror copy...
-Copy 2: data=12345 stored CRC=0x<CRC_12345> calculated CRC=0x<CRC_12345>
-Copy 2 CRC OK
-Copy 1 restored from Copy 2
-NVM_REQ_RESTORED_FROM_ROM
-```
+<img width="940" height="586" alt="image" src="https://github.com/user-attachments/assets/9062ac11-8978-4074-a24e-562a16e64f46" />
+
 
 ### 11.2 Second run (TC2)
 
-```
-Exercise 15: Redundant Read with Fallback
-ROM_BLOCK = 1
-Copy 1: data=12345 stored CRC=0x<CRC_12345> calculated CRC=0x<CRC_12345>
-Copy 1 CRC OK
-NVM_REQ_OK
-```
+<img width="940" height="589" alt="image" src="https://github.com/user-attachments/assets/f06f6deb-a417-453d-80fb-b977356ebe6d" />
+
 
 ### 11.3 ROM_BLOCK = 0 (TC3)
 
-```
-Exercise 15: Redundant Read with Fallback
-EEPROM provisioning completed
-Initialized ROM_BLOCK=0, Copy1=67892, Copy2=12345
-ROM_BLOCK = 0
-ROM_BLOCK is 0
-NVM_REQ_INTEGRITY_FAILED
-```
+<img width="940" height="590" alt="image" src="https://github.com/user-attachments/assets/de5abd49-6a92-4764-b8ac-da028eb31230" />
+
 
 ### 11.4 Screenshots
 
@@ -295,17 +265,11 @@ NVM_REQ_INTEGRITY_FAILED
 | `ROM_BLOCK` is a single unprotected byte | Protect the flag itself with a CRC or store it twice |
 | Program stops in an endless loop after the test | Run the check periodically or on request |
 
-## 14. License
 
-This project is released under the MIT License. See the `LICENSE` file.
-(Change this if your course or institution requires a different license.)
 
-The NXP S32 SDK is **not** included and is covered by its own license.
-
-## 15. Author
+## 14. Author
 
 | | |
 |---|---|
-| Name / team | `<your name or team>` |
-| Institution | `<your college or company>` |
-| Contact | `<email or GitHub profile>` |
+| Name        | `THARUN DANIEL Y` |
+| Institution | `SAVEETHA ENGINEERING COLLEGE` |
