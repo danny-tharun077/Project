@@ -110,7 +110,7 @@ Step by step:
 
 | Item | Details |
 |---|---|
-| Microcontroller board | `<your board name>` |
+| Microcontroller board | `NXP S32K144 Development Board` |
 | EEPROM | I2C EEPROM at 7-bit address `0x50`, 256-byte address space |
 | Connections | LPI2C0 SDA/SCL to the EEPROM (with pull-ups), LPUART_1 TX/RX to the PC through USB-serial |
 | PC | Windows with a free COM port |
@@ -119,9 +119,8 @@ Step by step:
 
 | Tool | Version / note |
 |---|---|
-| S32 Design Studio | `<your version>` |
-| S32 SDK | `<your SDK version>` (not included in this repository) |
-| PuTTY | Any recent version, used as the serial terminal |
+| S32 Design Studio | `3.5.0.0` |
+| PuTTY | `0.85` |
 
 ## 7. Project structure
 
@@ -142,7 +141,6 @@ eeprom-redundant-read-crc-fallback/
 └── .gitignore
 ```
 
-> Adjust the paths to match your real folder layout.
 
 ## 8. Configuration
 
@@ -161,8 +159,8 @@ eeprom-redundant-read-crc-fallback/
 |---|---|---|
 | Clock | `clockMan1_InitConfig0` | Enables the LPUART, LPI2C and CRC modules |
 | Pins | `g_pin_mux_InitConfigArr0` | UART TX/RX and I2C SDA/SCL routed to the board |
-| UART | `INST_LPUART_1`, `lpuart_0_InitConfig0` | Baud rate `<set yours>`, 8 data bits, no parity, 1 stop bit |
-| I2C | `INST_LPI2C0`, `lpi2c0_MasterConfig0` | Master mode, speed `<set yours>` |
+| UART | `INST_LPUART_1`, `lpuart_0_InitConfig0` | Baud rate `115200`, 8 data bits, no parity, 1 stop bit |
+| I2C | `INST_LPI2C0`, `lpi2c0_MasterConfig0` | Master mode, speed `100000` |
 | CRC | `INST_CRC_1`, `crc_1_Cfg0` | Polynomial and width `<set yours>` |
 | OSIF | `OSIF_TimeDelay()` | Used for the 5 ms EEPROM write delay |
 
