@@ -46,7 +46,7 @@ The program verifies Copy 1. If it is damaged, it checks Copy 2 and, if Copy 2 i
 | R2 | If the Copy 1 CRC fails, call `NvM_ReadMirrorCopy()` to fetch Copy 2 and report `NVM_REQ_RESTORED_FROM_ROM`. |
 | R3 | If `ROM_BLOCK = 0`, report `NVM_REQ_INTEGRITY_FAILED`. |
 | R4 | Initial values of `ROM_BLOCK`, Copy 1 and Copy 2 are written by a provisioning function, then verified over UART. |
-| R5 | Keep the scope small: only **2 fixed blocks**, not a full configuration-driven table. |
+
 
 ## 3. How it works
 
